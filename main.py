@@ -5,6 +5,7 @@ from config import config
 import uasyncio as asyncio
 from machine import Pin
 import dht, json
+from collections import OrderedDict
 
 d = dht.DHT22(Pin(13))
 
@@ -33,11 +34,11 @@ async def main(client):
                 temperatura=d.temperature()
                 try:
                     humedad=d.humidity()
-                    datos=json.dumps({
-                        'client_id':config['client_id'],
-                        'temperatura':'{:4.2f}'.format(temperatura),
-                        'humedad':'{:3.1f}'.format(humedad)
-                    })
+                    datos=json.dumps(OrderedDict([
+                        ('client_id',config['client_id']),
+                        ('temperatura',temperatura),
+                        ('humedad',humedad)
+                    ]))
                     await client.publish('sensor', datos, qos = 1)
                     n += 1
                 except OSError as e:
