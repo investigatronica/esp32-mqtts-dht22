@@ -35,7 +35,7 @@ async def main(client):
                 try:
                     humedad=d.humidity()
                     datos=json.dumps(OrderedDict([
-                        ('client_id',config['client_id']),
+                        ('sensor_id',config['client_id']),
                         ('temperatura',temperatura),
                         ('humedad',humedad)
                     ]))
