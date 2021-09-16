@@ -1,8 +1,4 @@
 # based on https://github.com/peterhinch/micropython-mqtt/tree/master/mqtt_as
-# (C) Copyright Peter Hinch 2017-2019.
-
-# red LED: ON == WiFi fail
-# green LED heartbeat: demonstrates scheduler is running.
 
 from mqtt_as import MQTTClient
 from config import config
