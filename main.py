@@ -47,7 +47,7 @@ async def main(client):
                 print("sin sensor")
         except OSError as e:
             print("sin sensor")
-        await asyncio.sleep(20)  # Broker is slow
+        await asyncio.sleep(120)  # Broker is slow
 
 # Define configuration
 config['subs_cb'] = sub_cb
