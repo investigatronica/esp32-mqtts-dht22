@@ -8,10 +8,15 @@ import dht, json
 from collections import OrderedDict
 
 d = dht.DHT22(Pin(13))
+led = Pin(21, Pin.OUT)
+print(config['client_id'])
+
 
 def sub_cb(topic, msg, retained):
-    c, r = [int(x) for x in msg.decode().split(' ')]
-    print('Topic = {} Count = {} Retransmissions = {} Retained = {}'.format(topic.decode(), c, r, retained))
+    if int(msg)>0:
+        led.value(1)
+    else:
+        led.value(0)
 
 async def wifi_han(state):
     print('Wifi is ', 'up' if state else 'down')
@@ -19,7 +24,7 @@ async def wifi_han(state):
 
 # If you connect with clean_session True, must re-subscribe (MQTT spec 3.1.2.4)
 async def conn_han(client):
-    await client.subscribe('result', 1)
+    await client.subscribe(config['client_id'].decode('ascii')+'/out', 1)   #suscribo al topico id ####
 
 async def main(client):
     await client.connect()
@@ -35,11 +40,10 @@ async def main(client):
                 try:
                     humedad=d.humidity()
                     datos=json.dumps(OrderedDict([
-                        ('sensor_id',config['client_id']),
                         ('temperatura',temperatura),
                         ('humedad',humedad)
                     ]))
-                    await client.publish('sensor', datos, qos = 1)
+                    await client.publish(config['client_id'], datos, qos = 1)
                     n += 1
                 except OSError as e:
                     print("sin sensor")
